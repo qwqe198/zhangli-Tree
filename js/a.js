@@ -28,6 +28,7 @@ if(hasMilestone("a",9))sp=sp.mul(player.f.points.add(10).log10())
 if(hasMilestone("a",6))sp=sp.mul(player.a.milestones.length+1)
 if(hasMilestone("a",7))sp=sp.mul(layers.p.eff().add(1))
 if(hasUpgrade("f",22))sp=sp.mul(10)
+if(hasUpgrade("s",13))sp=sp.mul(upgradeEffect("s",13))
 if(hasUpgrade("f",24))sp=sp.pow(1.05)
 sp=sp.pow(player.a.points.max(1))
         return sp
@@ -96,8 +97,23 @@ milestones: {
     },
 11: {
         requirementDescription: "第8个里程碑，但是在3冲击点",
-        effectDescription: "解锁复制超新星（下版本更新，需要1e154复制点）",
+        effectDescription: "20 超新星，宇宙级的张力 解锁复制超新星",
         done() { return layers.p.eff().gte(10)&&player.a.points.gte(3) }
+    },
+12: {
+        requirementDescription: "获得1复制超新星",
+        effectDescription: "自动购买p购买项11",
+        done() { return player.s.points.gte(1) }
+    },
+13: {
+        requirementDescription: "1e40冲击碎片",
+        effectDescription: "p层级升级35的五分之一加成复制乘数",
+        done() { return player.a.sp.gte(1e40) }
+    },
+14: {
+        requirementDescription: "获得2复制超新星",
+        effectDescription: "当前残局",
+        done() { return player.s.points.gte(2) }
     },
 },
 buyables: {
@@ -164,7 +180,7 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
         },
         },
     tabFormat: {
-        "Main": {
+        "mil": {
             content: [
                 "main-display",
  "prestige-button",
@@ -174,14 +190,24 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
                     { "font-size": "20px" }
                 ],
 "milestones",
-                "blank",
-                "buyables",
-                "blank",
-                "upgrades"
+                
             ],
             unlocked() { return true }
         },
-     
+     "buy": {
+            content: [
+                "main-display",
+ "prestige-button",
+                "resource-display",
+                ["display-text", () => 
+                    `你有${format(player.a.sp)}(+${format(layers.a.spg())}/s)冲击碎片`,
+                    { "font-size": "20px" }
+                ],
+
+                "buyables",
+            ],
+            unlocked() { return true }
+        },
         },
     
     update(diff) {

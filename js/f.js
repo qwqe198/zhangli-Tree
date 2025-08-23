@@ -30,8 +30,12 @@ exp = new Decimal(1)
     },
  m() { 
 m = new Decimal(1.01)
+if(hasMilestone("a",13))m=m.add(upgradeEffect("p",35).mul(0.2))
 if(hasUpgrade("f",22))m=m.mul(1.005)
+if(hasUpgrade("s",14))m=m.mul(upgradeEffect("s",14))
+
 if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
+
 if(hasUpgrade("f",24))m=m.pow(1.2)
 m=m.pow(buyableEffect("a",12))
 m=m.pow(buyableEffect("f",11))
@@ -55,7 +59,7 @@ if(x.gte(10))x=x.pow(3).div(100)
                 return ""
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
-                var eff = player.f.points.add(10).log10().add(10).log10().add(10).log10().pow(x.mul(4))
+                var eff = player.f.points.add(10).log10().add(10).log10().add(10).log10().pow(x.mul(3.8))
 
                 return eff
             },
@@ -179,7 +183,7 @@ effect(){
     
     update(diff) {
 player.f.points = player.f.points.mul(this.m().pow(diff))
-      player.f.points = player.f.points.min(1e154)  
+      player.f.points = player.f.points.min(1e308)  
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
    

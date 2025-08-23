@@ -23,6 +23,7 @@ if(hasUpgrade("p",31))mult=mult.mul(upgradeEffect("p", 31))
 if(hasUpgrade("f",12))mult=mult.mul(upgradeEffect("f",12))
 if(hasUpgrade("p",34))mult=mult.pow(buyableEffect("a",12))
 if(hasUpgrade("f",22))mult=mult.mul(10)
+if(hasUpgrade("s",12))mult=mult.mul(upgradeEffect("s",12))
 if(hasUpgrade("f",24))mult=mult.pow(1.05)
 if(hasMilestone("a",1))mult=mult.pow(0.5).div(2)
 
@@ -250,5 +251,9 @@ if(hasUpgrade("f",13))c = new Decimal(1.618).pow(x.pow(2)).floor()
         return 0
     },
     layerShown() { return true },
+  update(diff) {
+       if(hasMilestone("a", 12))setBuyableAmount(this.layer, 11, player.p.points.log10().div(0.2089785172762535).floor().add(1))
+        
+    },
  autoUpgrade() { return hasMilestone("a", 9)  },
 })

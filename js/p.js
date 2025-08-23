@@ -91,7 +91,7 @@ if(inChallenge("p",11))eff=eff.div(10)
         },
 25: {
             description: "解锁一个新层级",
-            cost() { return new Decimal(28657) },
+            cost() { return new Decimal(10946) },
             unlocked() { return true },
         },
 31: {
@@ -249,4 +249,5 @@ if(hasUpgrade("f",13))c = new Decimal(1.618).pow(x.pow(2)).floor()
         return 0
     },
     layerShown() { return true }
+
 })

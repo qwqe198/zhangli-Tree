@@ -40,6 +40,7 @@ if(hasUpgrade("p",35))exp=exp.add(upgradeEffect("p",35).mul(10))
 eff=eff.pow(buyableEffect("p",12))
 if(hasUpgrade("p",33))eff=eff.pow(upgradeEffect("p",33))
 if(inChallenge("p",11))eff=eff.div(10)
+if(hasMilestone("a",9))eff=eff.pow(0.5).div(hasUpgrade("f",14)?1:2)
         return eff
     },
     effectDescription() { return `基础点数获取${format(layers.p.eff())}` },
@@ -248,6 +249,6 @@ if(hasUpgrade("f",13))c = new Decimal(1.618).pow(x.pow(2)).floor()
         if (hasMilestone("a", 3)) return 1
         return 0
     },
-    layerShown() { return true }
-
+    layerShown() { return true },
+ autoUpgrade() { return hasMilestone("a", 9)  },
 })

@@ -24,6 +24,7 @@ sp: new Decimal(0),
 spg() { // Calculate the multiplier for main currency from bonuses
         sp = player.a.points.mul(player.points.add(10).log10())
 if(hasMilestone("a",4))sp=sp.mul(player.p.points.add(10).log10())
+if(hasMilestone("a",9))sp=sp.mul(player.f.points.add(10).log10())
 if(hasMilestone("a",6))sp=sp.mul(player.a.milestones.length+1)
 if(hasMilestone("a",7))sp=sp.mul(layers.p.eff().add(1))
 if(hasUpgrade("f",22))sp=sp.mul(10)
@@ -60,7 +61,7 @@ milestones: {
     },
 4: {
         requirementDescription: "2冲击点",
-        effectDescription: "点数获取^0.25后/1000,解锁复制点数，张力点也能增加冲击碎片获取，冲击碎片^（冲击点）",
+        effectDescription: "点数获取^0.25后/1000,解锁复制点，张力点也能增加冲击碎片获取，冲击碎片^（冲击点）",
         done() { return player.a.points.gte(2) }
     },
 5: {
@@ -85,8 +86,18 @@ milestones: {
     },
 9: {
         requirementDescription: "3冲击点",
-        effectDescription: "点数获取^0（咕咕咕，负面会改）",
+        effectDescription: "张力点效果^0.5后/2，（18 反向滚雪球，循环张力）复制乘数开（复制点的数量级）次根,但是复制点提升冲击碎片获取.自动购买p升级，如果购买f升级14，移除/2效果",
         done() { return player.a.points.gte(3) }
+    },
+10: {
+        requirementDescription: "19真的是循环,好有张力啊 第2个里程碑，但是在3冲击点",
+        effectDescription: "解锁第三个a购买项",
+        done() { return player.points.gte(1)&&inChallenge("p",11)&&player.a.points.gte(3) }
+    },
+11: {
+        requirementDescription: "第8个里程碑，但是在3冲击点",
+        effectDescription: "解锁复制超新星（下版本更新，需要1e154复制点）",
+        done() { return layers.p.eff().gte(10)&&player.a.points.gte(3) }
     },
 },
 buyables: {
@@ -131,9 +142,29 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
             },
             unlocked() { return hasMilestone("a",5) },
         },
+ 13: {
+            cost(x = getBuyableAmount(this.layer, this.id)) {
+                var c = new Decimal(1.618).pow(x.pow(3).add(100)).floor()
+                return c
+ },
+            display() { return `f升级12效果<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}冲击碎片<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },
+            canAfford() { return player.a.sp.gte(this.cost()) },
+            buy() {
+                player.a.sp = player.a.sp.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title() {
+                return ""
+            },
+            effect(x = getBuyableAmount(this.layer, this.id)) {
+                var eff = x.add(1).pow(0.5)
+                return eff
+            },
+            unlocked() { return hasMilestone("a",10) },
+        },
         },
     tabFormat: {
-        "主要": {
+        "Main": {
             content: [
                 "main-display",
  "prestige-button",
@@ -157,7 +188,7 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
         player.a.sp = player.a.sp.add(this.spg().mul(diff))
         
     },
-    row: 1, // Row the layer is in on the tree (0 is the first row)
+    row: 2, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         { key: "a", description: "a: 进行冲击重置", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],

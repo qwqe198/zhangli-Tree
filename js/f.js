@@ -34,8 +34,35 @@ if(hasUpgrade("f",22))m=m.mul(1.005)
 if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
 if(hasUpgrade("f",24))m=m.pow(1.2)
 m=m.pow(buyableEffect("a",12))
+m=m.pow(buyableEffect("f",11))
+if(hasMilestone("a",9))m=m.root(player.f.points.add(10).log10())
         return m
     },
+buyables: {
+        11: {
+            cost(x = getBuyableAmount(this.layer, this.id)) {
+if(x.gte(10))x=x.pow(3).div(100)
+                var c = new Decimal(1.618).pow(x.pow(2)).floor()
+                return c
+ },
+            display() { return `复制乘数<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}复制点<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },
+            canAfford() { return player.f.points.gte(this.cost()) },
+            buy() {
+                player.f.points = player.f.points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            },
+            title() {
+                return ""
+            },
+            effect(x = getBuyableAmount(this.layer, this.id)) {
+                var eff = player.f.points.add(10).log10().add(10).log10().add(10).log10().pow(x.mul(4))
+
+                return eff
+            },
+            unlocked() { return hasMilestone("a",9) },
+        },
+ 
+        },
 milestones: {
     1: {
         requirementDescription: "1复制点",
@@ -65,7 +92,7 @@ if(hasUpgrade("f",25)) b=b.pow(upgradeEffect("f",23))
             unlocked() { return true },
 effect(){
                     let b=player.f.points.add(10).log10()
-                 
+                 b=b.pow(buyableEffect("a",13))
                     return b;
                 },
                 effectDisplay() { return format(this.effect())+"倍" },
@@ -152,7 +179,7 @@ effect(){
     
     update(diff) {
 player.f.points = player.f.points.mul(this.m().pow(diff))
-        player.f.points = player.f.points.min(1e101)//下版本移除
+      player.f.points = player.f.points.min(1e154)  
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
    

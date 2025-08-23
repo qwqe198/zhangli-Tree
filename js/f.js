@@ -30,7 +30,9 @@ exp = new Decimal(1)
     },
  m() { 
 m = new Decimal(1.01)
+if(hasUpgrade("f",22))m=m.mul(1.005)
 if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
+if(hasUpgrade("f",24))m=m.pow(1.2)
 m=m.pow(buyableEffect("a",12))
         return m
     },
@@ -52,6 +54,7 @@ effect(){
                     let b=player.f.points.add(10).log10()
                 if(hasUpgrade("f",21)) b=b.pow(buyableEffect("a",12))
 if(hasUpgrade("f",21)) b=b.pow(buyableEffect("p",12))
+if(hasUpgrade("f",25)) b=b.pow(upgradeEffect("f",23))
                     return b;
                 },
                 effectDisplay() { return format(this.effect())+"倍" },
@@ -76,7 +79,7 @@ effect(){
 14: {
             description: "10.张力源自于叠加指数 点数获取变成原来的（冲击点）次方",
             cost() { return new Decimal(1e9) },
-            unlocked() { return hasMilestone("a",4) },
+            unlocked() { return true },
 effect(){
                     let b=player.a.points;
                  
@@ -93,6 +96,35 @@ effect(){
 21: {
             description: "12.两个加成一个 双倍张力 p和a购买项12加成升级11效果",
             cost() { return new Decimal(1e17) },
+            unlocked() { return true },
+
+        },
+22: {
+            description: "14 全部都有乘数，更多张力 点数，张力点，冲击碎片x10，复制乘数x1.005",
+            cost() { return new Decimal(1e24) },
+            unlocked() { return true },
+
+        },
+23: {
+            description: "15.膨胀 当然是张力的一种体现 复制点增加p购买项11效果",
+            cost() { return new Decimal(1e32) },
+            unlocked() { return true },
+effect(){
+                    let b=player.f.points.add(10).log10().add(10).log10()
+                 
+                    return b;
+                },
+                effectDisplay() { return "^"+format(this.effect())},
+        },
+24: {
+            description: "16 全部都有指数，极多张力 点数，张力点，冲击碎片^1.05，复制乘数^1.2",
+            cost() { return new Decimal(1e60) },
+            unlocked() { return true },
+
+        },
+25: {
+            description: "17三重张力 升级23加成升级11效果",
+            cost() { return new Decimal(1e100) },
             unlocked() { return true },
 
         },
@@ -120,7 +152,7 @@ effect(){
     
     update(diff) {
 player.f.points = player.f.points.mul(this.m().pow(diff))
-        player.f.points = player.f.points.min(1e20)
+        player.f.points = player.f.points.min(1e101)//下版本移除
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
    

@@ -24,6 +24,10 @@ sp: new Decimal(0),
 spg() { // Calculate the multiplier for main currency from bonuses
         sp = player.a.points.mul(player.points.add(10).log10())
 if(hasMilestone("a",4))sp=sp.mul(player.p.points.add(10).log10())
+if(hasMilestone("a",6))sp=sp.mul(player.a.milestones.length+1)
+if(hasMilestone("a",7))sp=sp.mul(layers.p.eff().add(1))
+if(hasUpgrade("f",22))sp=sp.mul(10)
+if(hasUpgrade("f",24))sp=sp.pow(1.05)
 sp=sp.pow(player.a.points.max(1))
         return sp
     },
@@ -56,13 +60,33 @@ milestones: {
     },
 4: {
         requirementDescription: "2冲击点",
-        effectDescription: "点数获取^0.25后/1000,解锁复制点数，张力点也能增加冲击碎片获取",
+        effectDescription: "点数获取^0.25后/1000,解锁复制点数，张力点也能增加冲击碎片获取，冲击碎片^（冲击点）",
         done() { return player.a.points.gte(2) }
     },
 5: {
         requirementDescription: "1e6冲击碎片",
         effectDescription: "解锁第二个a购买项",
         done() { return player.a.sp.gte(1e6) }
+    },
+6: {
+        requirementDescription: "获得4基础点数获取",
+        effectDescription: "冲击碎片x(里程碑+1)",
+        done() { return layers.p.eff().gte(4) }
+    },
+7: {
+        requirementDescription: "在震撼人心的挑战中获取1e30点数",
+        effectDescription: "冲击碎片x(基础点数获取+1)",
+        done() { return player.points.gte(1e30)&&inChallenge("p",11) }
+    },
+8: {
+        requirementDescription: "获得10基础点数获取",
+        effectDescription: "降低a第二个购买项价格",
+        done() { return layers.p.eff().gte(10) }
+    },
+9: {
+        requirementDescription: "3冲击点",
+        effectDescription: "点数获取^0（咕咕咕，负面会改）",
+        done() { return player.a.points.gte(3) }
     },
 },
 buyables: {
@@ -89,6 +113,7 @@ buyables: {
   12: {
             cost(x = getBuyableAmount(this.layer, this.id)) {
                 var c = new Decimal(1.618).pow(x.pow(1.5).add(29)).floor()
+if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
                 return c
  },
             display() { return `复制乘数<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}冲击碎片<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },

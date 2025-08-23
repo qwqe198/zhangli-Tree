@@ -22,15 +22,17 @@ if(hasUpgrade("p",23))mult=mult.div(new Decimal(1.1111).pow(hasMilestone("a",2)&
 if(hasUpgrade("p",31))mult=mult.mul(upgradeEffect("p", 31))
 if(hasUpgrade("f",12))mult=mult.mul(upgradeEffect("f",12))
 if(hasUpgrade("p",34))mult=mult.pow(buyableEffect("a",12))
+if(hasUpgrade("f",22))mult=mult.mul(10)
+if(hasUpgrade("f",24))mult=mult.pow(1.05)
 if(hasMilestone("a",1))mult=mult.pow(0.5).div(2)
 
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
-exp = new Decimal(1)
+exp = new Decimal(1)//基础是0.1，要x10
 if(hasUpgrade("p",22))exp=exp.sub(0.25)
 if(hasUpgrade("p",23))exp=exp.add(0.333)
-
+if(hasUpgrade("p",35))exp=exp.add(upgradeEffect("p",35).mul(10))
         return exp
     },
     eff() {
@@ -132,8 +134,43 @@ effect(){
 
         },
 35: {
-            description: "当前残局",
+            description: "13.极高的加成 张力点获取指数+1e-8*升级数量^5",
             cost() { return new Decimal(1000000) },
+            unlocked() { return hasMilestone("a",4) },
+effect(){
+                    let b=new Decimal(player.p.upgrades.length).pow(5).mul(1e-8)
+                 
+                    return b;
+                },
+                effectDisplay() { return "+"+format(this.effect())},
+        },
+41: {
+            description: "张力！",
+            cost() { return new Decimal(1e7) },
+            unlocked() { return hasMilestone("a",4) },
+
+        },
+42: {
+            description: "张力！！",
+            cost() { return new Decimal(2.5e7) },
+            unlocked() { return hasMilestone("a",4) },
+
+        },
+43: {
+            description: "张力！！！",
+            cost() { return new Decimal(2e8) },
+            unlocked() { return hasMilestone("a",4) },
+
+        },
+44: {
+            description: "张力！！！！",
+            cost() { return new Decimal(1e12) },
+            unlocked() { return hasMilestone("a",4) },
+
+        },
+45: {
+            description: "张力！！！！！",
+            cost() { return new Decimal(1e24) },
             unlocked() { return hasMilestone("a",4) },
 
         },
@@ -156,6 +193,7 @@ if(hasUpgrade("f",15))c = new Decimal(1.618).pow(x).floor()
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
                 var eff = new Decimal(10).pow(x)
+if(hasUpgrade("f",23))eff=eff.pow(upgradeEffect("f", 23))
                 return eff
             },
             unlocked() { return hasUpgrade("p",21) },

@@ -24,7 +24,7 @@ st: new Decimal(0),
 stg() { // Calculate the multiplier for main currency from bonuses
         st = new Decimal(1)
 if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
-if(!hasMilestone("a",11))st=new Decimal(0)
+if(!player.s.points.gte(1))st=new Decimal(0)
 
         return st
     },

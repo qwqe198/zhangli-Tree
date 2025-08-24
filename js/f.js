@@ -199,7 +199,7 @@ effect(){
             description: "p购买12基数基于复制点增加",
             cost() { return new Decimal("1e725") },
             unlocked() { return player.s.points.gte(3) },
-            unlocked() { return true },
+            
 effect(){
                     let b=player.f.points.add(10).log10().pow(0.005).sub(1)
                  

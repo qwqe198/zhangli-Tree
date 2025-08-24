@@ -28,6 +28,12 @@ exp = new Decimal(1)
 
         return exp
     },
+ mr() { 
+mr = new Decimal(1)
+if(hasMilestone("a",9))mr=player.f.points.add(10).log10()
+if(player.f.points.gte(1e308))mr=mr.pow(player.f.points.add(10).log10().div(308).max(1))
+        return mr
+    },
  m() { 
 m = new Decimal(1.01)
 if(hasMilestone("a",13))m=m.add(upgradeEffect("p",35).mul(0.2))
@@ -39,7 +45,8 @@ if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
 if(hasUpgrade("f",24))m=m.pow(1.2)
 m=m.pow(buyableEffect("a",12))
 m=m.pow(buyableEffect("f",11))
-if(hasMilestone("a",9))m=m.root(player.f.points.add(10).log10())
+if(hasUpgrade("s",21))m=m.pow(1.15)
+m=m.root(layers.f.mr())
         return m
     },
 buyables: {
@@ -159,6 +166,18 @@ effect(){
             unlocked() { return true },
 
         },
+31: {
+            description: "22 指数的指数 一定有张力 a购买13效果^2",
+            cost() { return new Decimal(1e308) },
+            unlocked() { return player.s.points.gte(2) },
+
+        },
+32: {
+            description: "p升级33加成p升级32效果",
+            cost() { return new Decimal("1e450") },
+            unlocked() { return player.s.points.gte(2) },
+
+        },
     },
     tabFormat: {
         "main": {
@@ -183,7 +202,7 @@ effect(){
     
     update(diff) {
 player.f.points = player.f.points.mul(this.m().pow(diff))
-      player.f.points = player.f.points.min(1e308)  
+      
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
    

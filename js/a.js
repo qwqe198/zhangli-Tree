@@ -111,9 +111,24 @@ milestones: {
         done() { return player.a.sp.gte(1e40) }
     },
 14: {
+        requirementDescription: "获得1e308复制点",
+        effectDescription: "21 有张力的软上限 里程碑9效果2变成原来的(复制点数量级/308)次方(不低于1)",
+        done() { return player.f.points.gte(1e308) }
+    },
+15: {
         requirementDescription: "获得2复制超新星",
-        effectDescription: "当前残局",
+        effectDescription: "复制超新星的(张力点)次方加成s前3个升级效果",
         done() { return player.s.points.gte(2) }
+    },
+16: {
+        requirementDescription: "获得1e128张力点",
+        effectDescription: "每个复制超新星使p购买12基数+0.01",
+        done() { return player.p.points.gte(1e128) }
+},
+17: {
+        requirementDescription: "获得3复制超新星",
+        effectDescription: "当前残局",
+        done() { return player.s.points.gte(3) }
     },
 },
 buyables: {
@@ -174,6 +189,7 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
                 var eff = x.add(1).pow(0.5)
+if(hasUpgrade("f",31))eff=eff.pow(2)
                 return eff
             },
             unlocked() { return hasMilestone("a",10) },

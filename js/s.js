@@ -1,5 +1,5 @@
 addLayer("s", {
-    name: "冲击点", // This is optional, only used in a few places, If absent it just uses the layer id.
+    name: "复制超新星", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "s", // This appears on the layer's node. Default is the id with the first letter capitalized
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() {
@@ -15,7 +15,7 @@ st: new Decimal(0),
     baseResource: "复制点", // Name of resource prestige is based on
     baseAmount() { return player.f.points }, // Get the current amount of baseResource
     type: "static", // normal:膨胀资源层 static: 非膨胀资源层 使用时要加双引号
-    exponent: 1, // Prestige currency exponent 初始值0.5
+    exponent: 0.01, // Prestige currency exponent 初始值0.5
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
 
@@ -23,7 +23,7 @@ st: new Decimal(0),
     },
 stg() { // Calculate the multiplier for main currency from bonuses
         st = new Decimal(1)
-
+if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
         return st
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -33,7 +33,7 @@ exp = new Decimal(1)
         return exp
     },
    getNextAt() {
-        let gain = new Decimal(1e154).pow(new Decimal(2).pow(player.s.points))
+        let gain = new Decimal("1e154").pow(new Decimal(2).pow(player.s.points))
       
         return gain
     },
@@ -43,8 +43,9 @@ upgrades: {
             cost() { return new Decimal(100) },
             unlocked() { return true },
 effect(){
-                    let b=player.s.st.pow(4)
-                 
+                    let b=player.s.st
+            if(hasMilestone("a",15))b=b.mul(player.s.points.pow(player.a.points))
+b=b.pow(4)
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -57,8 +58,9 @@ currencyDisplayName: "中子星",
             cost() { return new Decimal(200) },
             unlocked() { return true },
 effect(){
-                    let b=player.s.st.pow(2)
-                 
+                    let b=player.s.st
+if(hasMilestone("a",15))b=b.mul(player.s.points.pow(player.a.points))
+                 b=b.pow(2)
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -72,7 +74,7 @@ currencyDisplayName: "中子星",
             unlocked() { return true },
 effect(){
                     let b=player.s.st
-                 
+                 if(hasMilestone("a",15))b=b.mul(player.s.points.pow(player.a.points))
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -90,6 +92,47 @@ effect(){
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+15: {
+            description: "sn2使超新星次数可以加成中子星获取速度",
+            cost() { return new Decimal(350) },
+            unlocked() { return player.s.points.gte(2) },
+effect(){
+                    let b=player.s.points.pow(2)
+                 
+                    return b;
+                },
+effectDisplay() { return format(this.effect())+"倍" },
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+21: {
+            description: "t1使复制乘数变成原来的1.15次方",
+            cost() { return new Decimal(1500) },
+            unlocked() { return player.s.points.gte(2) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+22: {
+            description: "bh2使张力点变成原来的1.15次方",
+            cost() { return new Decimal(1500) },
+            unlocked() { return player.s.points.gte(2) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+23: {
+            description: "qol1自动购买p购买12",
+            cost() { return new Decimal(1500) },
+            unlocked() { return player.s.points.gte(2) },
+
 currencyDisplayName: "中子星",
         currencyInternalName: "st",
         currencyLayer: "s"
@@ -131,9 +174,9 @@ currencyDisplayName: "中子星",
         player.s.st = player.s.st.add(this.stg().mul(diff))
         
     },
-    row: 2, // Row the layer is in on the tree (0 is the first row)
+    row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         { key: "s", description: "s: 进行超新星重置", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
-    layerShown() { return hasMilestone("a",11) }
+    layerShown() { return hasMilestone("a",1) }
 })

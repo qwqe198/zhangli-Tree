@@ -137,6 +137,24 @@ currencyDisplayName: "中子星",
         currencyInternalName: "st",
         currencyLayer: "s"
         }, 
+24: {
+            description: "m2 23 看似减益 实则增益 一定张力 使里程碑14的效果/1.1",
+            cost() { return new Decimal(10000) },
+            unlocked() { return player.s.points.gte(3) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+25: {
+            description: "qol2你的复制点不会低于1",
+            cost() { return new Decimal(10000) },
+            unlocked() { return player.s.points.gte(3) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
     },
 
     tabFormat: {

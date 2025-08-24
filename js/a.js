@@ -46,89 +46,94 @@ exp = new Decimal(1)
     },
 milestones: {
     1: {
-        requirementDescription: "1冲击点(6.极具张力的名称)",
+        requirementDescription: "1 1冲击点(6.极具张力的名称)",
         effectDescription: "张力点获取^0.5后/2，解锁冲击碎片，p升级25效果改为解锁一个挑战",
         done() { return player.a.points.gte(1) }
     },
    2: {
-        requirementDescription: "在震撼人心的挑战中获取1点数",
+        requirementDescription: "2 在震撼人心的挑战中获取1点数",
         effectDescription: "7富有张力的加成 如果你同时买了这两个升级 p升级22第1个效果^10，p升级23第2个效果^80",
         done() { return player.points.gte(1)&&inChallenge("p",11) }
     },
 3: {
-        requirementDescription: "获得2基础点数获取",
+        requirementDescription: "3 获得2基础点数获取",
         effectDescription: "8.超快速生产 你每秒获得十亿分之1000000000倍的张力点",
         done() { return layers.p.eff().gte(2) }
     },
 4: {
-        requirementDescription: "2冲击点",
+        requirementDescription: "4 2冲击点",
         effectDescription: "点数获取^0.25后/1000,解锁复制点，张力点也能增加冲击碎片获取，冲击碎片^（冲击点）",
         done() { return player.a.points.gte(2) }
     },
 5: {
-        requirementDescription: "1e6冲击碎片",
+        requirementDescription: "5 1e6冲击碎片",
         effectDescription: "解锁第二个a购买项",
         done() { return player.a.sp.gte(1e6) }
     },
 6: {
-        requirementDescription: "获得4基础点数获取",
+        requirementDescription: "6 获得4基础点数获取",
         effectDescription: "冲击碎片x(里程碑+1)",
         done() { return layers.p.eff().gte(4) }
     },
 7: {
-        requirementDescription: "在震撼人心的挑战中获取1e30点数",
+        requirementDescription: "7 在震撼人心的挑战中获取1e30点数",
         effectDescription: "冲击碎片x(基础点数获取+1)",
         done() { return player.points.gte(1e30)&&inChallenge("p",11) }
     },
 8: {
-        requirementDescription: "获得10基础点数获取",
+        requirementDescription: "8 获得10基础点数获取",
         effectDescription: "降低a第二个购买项价格",
         done() { return layers.p.eff().gte(10) }
     },
 9: {
-        requirementDescription: "3冲击点",
+        requirementDescription: "9 3冲击点",
         effectDescription: "张力点效果^0.5后/2，（18 反向滚雪球，循环张力）复制乘数开（复制点的数量级）次根,但是复制点提升冲击碎片获取.自动购买p升级，如果购买f升级14，移除/2效果",
         done() { return player.a.points.gte(3) }
     },
 10: {
-        requirementDescription: "19真的是循环,好有张力啊 第2个里程碑，但是在3冲击点",
+        requirementDescription: "10 19真的是循环,好有张力啊 第2个里程碑，但是在3冲击点",
         effectDescription: "解锁第三个a购买项",
         done() { return player.points.gte(1)&&inChallenge("p",11)&&player.a.points.gte(3) }
     },
 11: {
-        requirementDescription: "第8个里程碑，但是在3冲击点",
+        requirementDescription: "11 第8个里程碑，但是在3冲击点",
         effectDescription: "20 超新星，宇宙级的张力 解锁复制超新星",
         done() { return layers.p.eff().gte(10)&&player.a.points.gte(3) }
     },
 12: {
-        requirementDescription: "获得1复制超新星",
+        requirementDescription: "12 获得1复制超新星",
         effectDescription: "自动购买p购买项11",
         done() { return player.s.points.gte(1) }
     },
 13: {
-        requirementDescription: "1e40冲击碎片",
+        requirementDescription: "13 1e40冲击碎片",
         effectDescription: "p层级升级35的五分之一加成复制乘数",
         done() { return player.a.sp.gte(1e40) }
     },
 14: {
-        requirementDescription: "获得1e308复制点",
+        requirementDescription: "14 获得1e308复制点",
         effectDescription: "21 有张力的软上限 里程碑9效果2变成原来的(复制点数量级/308)次方(不低于1)",
         done() { return player.f.points.gte(1e308) }
     },
 15: {
-        requirementDescription: "获得2复制超新星",
+        requirementDescription: "15 获得2复制超新星",
         effectDescription: "复制超新星的(张力点)次方加成s前3个升级效果",
         done() { return player.s.points.gte(2) }
     },
 16: {
-        requirementDescription: "获得1e128张力点",
+        requirementDescription: "16 获得1e128张力点",
         effectDescription: "每个复制超新星使p购买12基数+0.01",
         done() { return player.p.points.gte(1e128) }
 },
 17: {
-        requirementDescription: "获得3复制超新星",
-        effectDescription: "当前残局",
+        requirementDescription: "17 获得3复制超新星",
+        effectDescription: "里程碑13效果改成(5-复制超新星)分之一(不低于1)",
         done() { return player.s.points.gte(3) }
+    },
+18: {
+        requirementDescription: "18 4冲击点",
+        effectDescription: "p购买11效果开(冲击点)次根,咕咕咕",
+        done() { return player.a.points.gte(4) }
     },
 },
 buyables: {

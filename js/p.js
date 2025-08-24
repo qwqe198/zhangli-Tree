@@ -178,6 +178,18 @@ effect(){
             unlocked() { return hasMilestone("a",4) },
 
         },
+51: {
+            description: "升级35加成购买12基数",
+            cost() { return new Decimal(1e140) },
+            unlocked() { return hasMilestone("a",9) },
+
+        },
+52: {
+            description: "24节俭张力 p购买12变得更便宜",
+            cost() { return new Decimal(7.77e177) },
+            unlocked() { return hasMilestone("a",9) },
+
+        },
     },
 buyables: {
         11: {
@@ -198,6 +210,7 @@ if(hasUpgrade("f",15))c = new Decimal(1.618).pow(x).floor()
             effect(x = getBuyableAmount(this.layer, this.id)) {
                 var eff = new Decimal(10).pow(x)
 if(hasUpgrade("f",23))eff=eff.pow(upgradeEffect("f", 23))
+if(hasMilestone("a",18))eff=eff.root(player.a.points)
                 return eff
             },
             unlocked() { return hasUpgrade("p",21) },
@@ -205,7 +218,7 @@ if(hasUpgrade("f",23))eff=eff.pow(upgradeEffect("f", 23))
  12: {
             cost(x = getBuyableAmount(this.layer, this.id)) {
                 var c = new Decimal(1.618).pow(x.pow(2).add(16)).floor()
-if(hasUpgrade("f",13))c = new Decimal(1.618).pow(x.pow(2)).floor()
+if(hasUpgrade("f",13))c = new Decimal(1.618).pow(x.pow(hasUpgrade("p",52)?1.9:2)).floor()
                 return c
  },
             display() { return `张力点效果<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}张力点<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },
@@ -218,8 +231,12 @@ if(hasUpgrade("f",13))c = new Decimal(1.618).pow(x.pow(2)).floor()
                 return "5.张力的另一个形式 指数加成"
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
-                var eff = x.mul(0.1).add(1)
-if(hasMilestone("a", 16))eff=eff.mul(player.s.points.mul(0.1).add(1))
+var base = new Decimal(0.1)
+                
+if(hasMilestone("a", 16))base=base.add(player.s.points.mul(0.01))
+if(hasUpgrade("p",51))base=base.add(upgradeEffect("p", 35))
+if(hasUpgrade("f",35))base=base.add(upgradeEffect("f", 35))
+var eff = x.mul(base).add(1)
                 return eff
             },
             unlocked() { return hasUpgrade("p",24) },
@@ -256,7 +273,7 @@ if(hasMilestone("a", 16))eff=eff.mul(player.s.points.mul(0.1).add(1))
     layerShown() { return true },
   update(diff) {
        if(hasMilestone("a", 12))setBuyableAmount(this.layer, 11, player.p.points.add(1).log10().div(0.2089785172762535).floor().add(1))
-        if(hasUpgrade("s", 23))setBuyableAmount(this.layer, 12, player.p.points.add(1).log10().div(0.2089785172762535).root(2).floor().add(1))
+        if(hasUpgrade("s", 23))setBuyableAmount(this.layer, 12, player.p.points.add(1).log10().div(0.2089785172762535).root(hasUpgrade("p",52)?1.9:2).floor().add(1))
     },
  autoUpgrade() { return hasMilestone("a", 9)  },
 })

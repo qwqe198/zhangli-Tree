@@ -30,13 +30,16 @@ exp = new Decimal(1)
     },
  mr() { 
 mr = new Decimal(1)
+mrpow=new Decimal(1)
+if(player.f.points.gte(1e308))mrpow=player.f.points.add(10).log10().div(308).max(1)
+if(hasUpgrade("s",24))mrpow=mrpow.div(1.1)
 if(hasMilestone("a",9))mr=player.f.points.add(10).log10()
-if(player.f.points.gte(1e308))mr=mr.pow(player.f.points.add(10).log10().div(308).max(1))
+mr=mr.pow(mrpow)
         return mr
     },
  m() { 
 m = new Decimal(1.01)
-if(hasMilestone("a",13))m=m.add(upgradeEffect("p",35).mul(0.2))
+if(hasMilestone("a",13))m=m.add(upgradeEffect("p",35).div(hasMilestone("a",17)?new Decimal(5).sub(player.s.points).max(1):5))
 if(hasUpgrade("f",22))m=m.mul(1.005)
 if(hasUpgrade("s",14))m=m.mul(upgradeEffect("s",14))
 
@@ -192,6 +195,30 @@ effect(){
             unlocked() { return player.s.points.gte(2) },
 
         },
+35: {
+            description: "p购买12基数基于复制点增加",
+            cost() { return new Decimal("1e725") },
+            unlocked() { return player.s.points.gte(3) },
+            unlocked() { return true },
+effect(){
+                    let b=player.f.points.add(10).log10().pow(0.005).sub(1)
+                 
+                    return b;
+                },
+                effectDisplay() { return "+"+format(this.effect())},
+        },
+41: {
+            description: "s升级14效果指数加成点数",
+            cost() { return new Decimal("7.77e777") },
+            unlocked() { return player.s.points.gte(3) },
+
+        },
+42: {
+            description: "s升级12效果加成点数",
+            cost() { return new Decimal("1e800") },
+            unlocked() { return player.s.points.gte(3) },
+
+        },
     },
     tabFormat: {
         "main": {
@@ -216,7 +243,7 @@ effect(){
     
     update(diff) {
 player.f.points = player.f.points.mul(this.m().pow(diff))
-      
+      if(hasUpgrade("s",25))player.f.points = player.f.points.max(1)
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
    

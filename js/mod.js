@@ -48,8 +48,9 @@ gain=gain.mul(buyableEffect("p",11))
 gain=gain.mul(buyableEffect("a",11))
 if(hasUpgrade("f",22))gain=gain.mul(10)
 if(hasUpgrade("f",11))gain=gain.mul(upgradeEffect("f",11))
+if(hasUpgrade("f",42))gain=gain.mul(upgradeEffect("s",12))
 if(hasUpgrade("f",24))gain=gain.pow(1.05)
-
+if(hasUpgrade("f",41))gain=gain.pow(upgradeEffect("s",14))
 if(hasMilestone("a",4))gain=gain.pow(0.25).div(1000)
 if(gain.gte(1e100))gain=gain.pow(0.1).mul(1e90)
 	return gain

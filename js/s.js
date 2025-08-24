@@ -196,5 +196,6 @@ currencyDisplayName: "中子星",
     hotkeys: [
         { key: "s", description: "s: 进行超新星重置", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
-    layerShown() { return hasMilestone("a",1) }
+    layerShown() { return hasMilestone("a",11) }
+
 })

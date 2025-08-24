@@ -43,6 +43,8 @@ if(hasUpgrade("s",14))m=m.mul(upgradeEffect("s",14))
 if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
 
 if(hasUpgrade("f",24))m=m.pow(1.2)
+if(hasUpgrade("f",33))m=m.pow(upgradeEffect("f",23))
+if(hasUpgrade("f",34))m=m.pow(buyableEffect("p",12))
 m=m.pow(buyableEffect("a",12))
 m=m.pow(buyableEffect("f",11))
 if(hasUpgrade("s",21))m=m.pow(1.15)
@@ -175,6 +177,18 @@ effect(){
 32: {
             description: "p升级33加成p升级32效果",
             cost() { return new Decimal("1e450") },
+            unlocked() { return player.s.points.gte(2) },
+
+        },
+33: {
+            description: "升级23对复制点生效",
+            cost() { return new Decimal("1e520") },
+            unlocked() { return player.s.points.gte(2) },
+
+        },
+34: {
+            description: "p购买12对复制点生效",
+            cost() { return new Decimal("1e575") },
             unlocked() { return player.s.points.gte(2) },
 
         },

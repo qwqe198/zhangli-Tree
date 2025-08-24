@@ -24,6 +24,8 @@ st: new Decimal(0),
 stg() { // Calculate the multiplier for main currency from bonuses
         st = new Decimal(1)
 if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
+if(!hasMilestone("a",11))st=new Decimal(0)
+
         return st
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -197,5 +199,4 @@ currencyDisplayName: "中子星",
         { key: "s", description: "s: 进行超新星重置", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
     layerShown() { return hasMilestone("a",11) }
-
 })

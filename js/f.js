@@ -57,7 +57,7 @@ m=m.root(layers.f.mr())
 buyables: {
         11: {
             cost(x = getBuyableAmount(this.layer, this.id)) {
-if(x.gte(10))x=x.pow(3).div(100)
+if(x.gte(10)&&!hasMilestone("a",19))x=x.pow(3).div(100)
                 var c = new Decimal(1.618).pow(x.pow(2)).floor()
                 return c
  },
@@ -71,7 +71,7 @@ if(x.gte(10))x=x.pow(3).div(100)
                 return ""
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
-                var eff = player.f.points.add(10).log10().add(10).log10().add(10).log10().pow(x.mul(3.8))
+                var eff = player.f.points.add(10).log10().add(10).log10().add(10).log10().pow(x.mul(hasMilestone("a",18)?1:3.8))
 
                 return eff
             },

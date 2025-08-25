@@ -28,6 +28,7 @@ if(hasUpgrade("f",24))mult=mult.pow(1.05)
 if(hasUpgrade("s",22))mult=mult.pow(1.15)
 
 if(hasMilestone("a",1))mult=mult.pow(0.5).div(2)
+if(hasMilestone("a",18))mult=mult.root(player.a.points)
 if(mult.gte(1e100))mult=mult.pow(0.1).mul(1e90)
         return mult
     },
@@ -42,8 +43,9 @@ if(hasUpgrade("p",35))exp=exp.add(upgradeEffect("p",35).mul(10))
         let eff = player.p.points.add(1).log10().mul(0.1).add(1)
 eff=eff.pow(buyableEffect("p",12))
 if(hasUpgrade("p",33))eff=eff.pow(upgradeEffect("p",33))
-if(inChallenge("p",11))eff=eff.div(10)
+if(inChallenge("p",11)&&!hasMilestone("a", 18))eff=eff.div(10)
 if(hasMilestone("a",9))eff=eff.pow(0.5).div(hasUpgrade("f",14)?1:2)
+if(inChallenge("p",11)&&hasMilestone("a", 18))eff=new Decimal(1)
         return eff
     },
     effectDescription() { return `基础点数获取${format(layers.p.eff())}` },
@@ -190,6 +192,18 @@ effect(){
             unlocked() { return hasMilestone("a",9) },
 
         },
+53: {
+            description: "购买12加成a购买11",
+            cost() { return new Decimal(100000) },
+            unlocked() { return hasMilestone("a",18) },
+
+        },
+54: {
+            description: "中子星获取+(冲击点),你的复制超新星不会低于1",
+            cost() { return new Decimal(1e16) },
+            unlocked() { return hasMilestone("a",18) },
+
+        },
     },
 buyables: {
         11: {
@@ -244,8 +258,8 @@ var eff = x.mul(base).add(1)
         },
     challenges: {
         11: {
-            name: '震撼人心的挑战',
-            challengeDescription: '基础点数获取最终/10.',
+            name() { return hasMilestone("a", 18)? "震撼人心的挑战2":'震撼人心的挑战'},
+            challengeDescription() { return hasMilestone("a", 18)? "基础点数获取固定为1":'基础点数获取最终/10.'},
             rewardDescription() { 
                 return `当前最高${format(this.rewardEffect())}`
             },
@@ -253,6 +267,12 @@ var eff = x.mul(base).add(1)
                 return new Decimal(player.p.challenges[11])
             },
             goal: 0,
+ onEnter() {
+                if(hasMilestone("a", 18))player.p.points=new Decimal(0)
+if(hasMilestone("a", 18))player.p.buyables[11] = new Decimal(0)
+if(hasMilestone("a", 18))player.p.buyables[12] = new Decimal(0)
+            if(hasMilestone("a", 18))player.p.upgrades = []
+            },
             onExit() {
                 player.p.challenges[11] = player.points.max(challengeEffect("p", 11)).max(0)
             },

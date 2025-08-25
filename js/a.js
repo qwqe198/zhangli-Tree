@@ -132,8 +132,18 @@ milestones: {
     },
 18: {
         requirementDescription: "18 4冲击点",
-        effectDescription: "p购买11效果开(冲击点)次根,咕咕咕",
+        effectDescription: "p购买11效果和张力点获取开(冲击点)次根,削弱f购买11效果,25 张力升级 修改p挑战11，且进入时重置p除挑战的所有东西",
         done() { return player.a.points.gte(4) }
+    },
+19: {
+        requirementDescription: "19 在震撼人心的挑战2中获取1e64点数",
+        effectDescription: "移除f购买11的折算",
+        done() { return player.points.gte(1e64)&&inChallenge("p",11)&&hasMilestone("a",18)}
+    },
+20: {
+        requirementDescription: "20 在震撼人心的挑战2中获取1e72点数",
+        effectDescription: "降低a购买13价格,26 黄金张力 解锁镀金(咕咕咕）",
+        done() { return player.points.gte(1e72)&&inChallenge("p",11)&&hasMilestone("a",18)}
     },
 },
 buyables: {
@@ -153,6 +163,7 @@ buyables: {
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
                 var eff = player.a.sp.add(10).log10().pow(x)
+if(hasUpgrade("p",53))eff=eff.pow(buyableEffect("p", 12))
                 return eff
             },
             unlocked() { return hasMilestone("a",1) },
@@ -181,6 +192,7 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
  13: {
             cost(x = getBuyableAmount(this.layer, this.id)) {
                 var c = new Decimal(1.618).pow(x.pow(3).add(100)).floor()
+if(hasMilestone("a",20))c = new Decimal(1.618).pow(x.pow(3)).floor()
                 return c
  },
             display() { return `f升级12效果<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}冲击碎片<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },

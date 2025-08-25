@@ -24,6 +24,7 @@ st: new Decimal(0),
 stg() { // Calculate the multiplier for main currency from bonuses
         st = new Decimal(1)
 if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
+if(hasUpgrade("p",54))st=st.mul(player.a.points)
 if(!player.s.points.gte(1))st=new Decimal(0)
 
         return st
@@ -192,8 +193,9 @@ currencyDisplayName: "中子星",
     
     update(diff) {
         player.s.st = player.s.st.add(this.stg().mul(diff))
-        
+if(hasUpgrade("p",54))player.s.points = player.s.points.max(1)
     },
+    
     row: 1, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
         { key: "s", description: "s: 进行超新星重置", onPress() { if (canReset(this.layer)) doReset(this.layer) } },

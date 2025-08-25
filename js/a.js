@@ -117,7 +117,7 @@ milestones: {
     },
 15: {
         requirementDescription: "15 获得2复制超新星",
-        effectDescription: "复制超新星的(张力点)次方加成s前3个升级效果",
+        effectDescription: "复制超新星的(冲击点)次方加成s前3个升级效果",
         done() { return player.s.points.gte(2) }
     },
 16: {
@@ -252,4 +252,5 @@ if(hasUpgrade("f",31))eff=eff.pow(2)
         { key: "a", description: "a: 进行冲击重置", onPress() { if (canReset(this.layer)) doReset(this.layer) } },
     ],
     layerShown() { return hasUpgrade("p",25)||player.a.points.gte(1) }
+
 })

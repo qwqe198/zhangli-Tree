@@ -56,6 +56,8 @@ m=m.pow(buyableEffect("a",12))
 m=m.pow(buyableEffect("f",11))
 if(hasUpgrade("s",21))m=m.pow(1.15)
 if(hasMilestone("a",23))m=m.pow(player.a.points)
+if(hasMilestone("a",29))m=m.pow(player.s.upgrades.length+1)
+if(hasMilestone("a",25))m=m.pow(challengeEffect("a", 11).add(1))
 m=m.root(layers.f.mr())
 
         return m
@@ -64,7 +66,10 @@ buyables: {
         11: {
             cost(x = getBuyableAmount(this.layer, this.id)) {
 if(x.gte(10)&&!hasMilestone("a",19))x=x.pow(3).div(100)
-                var c = new Decimal(1.618).pow(x.pow(2)).floor()
+var pow=new Decimal(2)
+if(hasUpgrade("f",43))pow=pow.root(upgradeEffect("f",43))
+                var c = new Decimal(1.618).pow(x.pow(pow)).floor()
+if(hasUpgrade("f",44))c=c.root(upgradeEffect("f",43))
                 return c
  },
             display() { return `复制乘数<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}复制点<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },
@@ -87,7 +92,7 @@ if(x.gte(10)&&!hasMilestone("a",19))x=x.pow(3).div(100)
         },
 milestones: {
     1: {
-        requirementDescription: "1复制点",
+        requirementDescription: "1复制点(当前)",
         effectDescription: "禁用复制点重置",
         done() { return player.f.points.gte(1) }
     },
@@ -225,12 +230,30 @@ effect(){
             unlocked() { return player.s.points.gte(3) },
 
         },
+43: {
+            description: "复制超新星降低f购买11价格增长指数",
+            cost() { return new Decimal("1e825") },
+            unlocked() { return player.s.points.gte(3) },
+effect(){
+                    let b=player.s.points.add(10).log10()
+                 
+                    return b;
+                },
+                effectDisplay() { return "开"+format(this.effect())+"次根"},
+
+        },
+44: {
+            description: "上一个升级再次对价格本身生效",
+            cost() { return new Decimal("1e925") },
+            unlocked() { return player.s.points.gte(3) },
+
+        },
     },
     tabFormat: {
         "main": {
             content: [
                 "main-display",
-["prestige-button", "", function () { return hasMilestone("f", 1) ? { 'display': 'none' } : {} }],
+["prestige-button", "", function () { return player.f.points.gte(1)? { 'display': 'none' } : {} }],
 
                 ["display-text", () => 
                     `9.滚雪球同样是具备张力的 复制点每秒x${format(layers.f.m())},建议在复制点略高于价格时购买`,
@@ -248,8 +271,12 @@ effect(){
         },
     
     update(diff) {
+var pow11=new Decimal(2)
+if(hasUpgrade("f",43))pow11=pow11.root(upgradeEffect("f",43))
 player.f.points = player.f.points.mul(this.m().pow(diff))
       if(hasUpgrade("s",25))player.f.points = player.f.points.max(1)
+if(hasMilestone("a", 25))setBuyableAmount(this.layer, 11, player.f.points.pow(hasUpgrade("f",44)?upgradeEffect("f",43):1).add(1).log10().div(0.2089785172762535).root(pow11).floor().add(1))
+    
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
    

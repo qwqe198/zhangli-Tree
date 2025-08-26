@@ -25,6 +25,7 @@ stg() { // Calculate the multiplier for main currency from bonuses
         st = new Decimal(1)
 if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
 if(hasUpgrade("p",54))st=st.mul(player.a.points)
+if(hasMilestone("a",26))st=st.mul(player.f.points.add(10).log10().add(10).log10())
 if(!player.s.points.gte(1))st=new Decimal(0)
 
         return st
@@ -153,6 +154,15 @@ currencyDisplayName: "中子星",
             description: "qol2你的复制点不会低于1",
             cost() { return new Decimal(10000) },
             unlocked() { return player.s.points.gte(3) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+31: {
+            description: "m2使点数获取的软上限阈值变成原来的1.5次方",
+            cost() { return new Decimal(50000) },
+            unlocked() { return player.s.points.gte(3)&&hasMilestone("a",26) },
 
 currencyDisplayName: "中子星",
         currencyInternalName: "st",

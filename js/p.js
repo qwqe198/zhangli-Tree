@@ -9,7 +9,11 @@ addLayer("p", {
         }
     },
     color: "#00FF00",
-    requires: new Decimal(10), // Can be a function that takes requirement increases into account
+ requires() {
+let r=new Decimal(10)
+if(inChallenge("a",12))r=new Decimal(Infinity)
+ return r
+}, 
     resource: "张力点", // Name of prestige currency
     baseResource: "点数", // Name of resource prestige is based on
     baseAmount() { return player.points }, // Get the current amount of baseResource
@@ -42,6 +46,7 @@ if(hasMilestone("a",21))exp=exp.add(challengeEffect("a", 11).div(10))
     },
     eff() {
         let eff = player.p.points.add(1).log10().mul(0.1).add(1)
+if(hasMilestone("a",28))eff=eff.mul(player.a.milestones.length/25)
 eff=eff.pow(buyableEffect("p",12))
 if(hasUpgrade("p",33))eff=eff.pow(upgradeEffect("p",33))
 if(inChallenge("p",11)&&!hasMilestone("a", 18))eff=eff.div(10)

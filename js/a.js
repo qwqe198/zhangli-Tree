@@ -111,7 +111,7 @@ milestones: {
         done() { return player.a.sp.gte(1e40) }
     },
 14: {
-        requirementDescription: "14 获得1e308复制点",
+        requirementDescription: "14 获得1e308复制点(软上限)",
         effectDescription: "21 有张力的软上限 里程碑9效果2变成原来的(复制点数量级/308)次方(不低于1)",
         done() { return player.f.points.gte(1e308) }
     },
@@ -157,14 +157,44 @@ milestones: {
     },
 23: {
         requirementDescription: "23 27.双里程碑张力 在上一个里程碑的基础上获得1e25复制点",
-        effectDescription: "复制点乘数^(冲击点）",
+        effectDescription: "复制点乘数^(冲击点)",
         done() { return hasMilestone("a",22)&&player.f.points.gte(1e25)}
     },
 24: {
         requirementDescription: "24 第15里程碑 但是在4冲击点",
-        effectDescription: "解锁f镀金(制作中)",
-        done() { return hasMilestone("a",22)&&player.s.points.gte(2)}
+        effectDescription: "解锁f镀金",
+        done() { return hasMilestone("a",18)&&player.s.points.gte(2)}
     },
+25: {
+        requirementDescription: "25 获得1f镀金分数",
+        effectDescription: "自动购买复制点第一个购买,复制乘数变成原来的(f镀金分数+1)次方",
+        done() { return challengeEffect("a", 12).gte(1)}
+    },
+26: {
+        requirementDescription: "26 第17里程碑 但是在4冲击点",
+        effectDescription: "中子星获取x(复制点的二重数量级),在3超新星时解锁新的中子树升级",
+        done() { return hasMilestone("a",18)&&player.s.points.gte(3)}
+    },
+27: {
+        requirementDescription: "27 获得1e1000复制点",
+        effectDescription: "a购买12效果^1.1",
+        done() { return player.f.points.gte("1e1000") }
+},
+28: {
+        requirementDescription: "28 获得5.7p镀金分数",
+        effectDescription: "基础点数获取乘里程碑的25分之一",
+        done() { return challengeEffect("a", 11).gte(5.7)}
+    },
+29: {
+        requirementDescription: "29 获得1.3f镀金分数",
+        effectDescription: "复制乘数变成原来的(s升级+1)次方",
+        done() { return challengeEffect("a", 12).gte(1.3)}
+    },
+30: {
+        requirementDescription: "30 获得4复制超新星",
+        effectDescription: "咕咕咕",
+        done() { return player.s.points.gte("4") }
+},
 },
 buyables: {
         11: {
@@ -205,6 +235,7 @@ if(hasMilestone("a",8))c = new Decimal(1.618).pow(x.pow(1.5)).floor()
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
                 var eff = x.mul(0.1).add(1)
+if(hasMilestone("a",27))eff=eff.pow(1.1)
                 return eff
             },
             unlocked() { return hasMilestone("a",5) },
@@ -295,6 +326,28 @@ return re
             canComplete() { return true },
             resource() { return player.p.points },
             unlocked() { return  hasMilestone("a", 20) }
+        },
+12: {
+            name() { return 'f镀金'},
+            challengeDescription() { return '禁用p层级,基于镀金内最高复制点获得分数.'},
+            rewardDescription() { 
+                return `镀金分数:${format(this.rewardEffect())}`
+            },
+            rewardEffect() {
+let re=new Decimal(0)
+              if(inChallenge("a",12))  re=re.max(player.f.points.add(1).log10().add(1).log10()).max(challengeEffect("a", 12))
+ if(!inChallenge("a",12))re=re.max(player.a.challenges[12])
+return re
+            },
+            goal: 0,
+
+            onExit() {
+                player.a.challenges[12] = player.f.points.add(1).log10().add(1).log10().max(challengeEffect("a", 12)).max(0)
+            },
+            completionLimit: "1eeeee10",
+            canComplete() { return true },
+            resource() { return player.f.points },
+            unlocked() { return  hasMilestone("a", 24) }
         }
     },
     update(diff) {

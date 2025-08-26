@@ -83,7 +83,7 @@ if(hasUpgrade("f",44))c=c.root(upgradeEffect("f",43))
             },
             effect(x = getBuyableAmount(this.layer, this.id)) {
                 var eff = player.f.points.add(10).log10().add(10).log10().add(10).log10().pow(x.mul(hasMilestone("a",18)?1:3.8))
-
+if(hasUpgrade("f",45))eff=eff.pow(1.05)
                 return eff
             },
             unlocked() { return hasMilestone("a",9) },
@@ -248,6 +248,12 @@ effect(){
             unlocked() { return player.s.points.gte(3) },
 
         },
+45: {
+            description: "f购买11效果^1.05",
+            cost() { return new Decimal("1e1050") },
+            unlocked() { return player.s.points.gte(3) },
+
+        },
     },
     tabFormat: {
         "main": {
@@ -274,11 +280,11 @@ effect(){
 var pow11=new Decimal(2)
 if(hasUpgrade("f",43))pow11=pow11.root(upgradeEffect("f",43))
 player.f.points = player.f.points.mul(this.m().pow(diff))
-      if(hasUpgrade("s",25))player.f.points = player.f.points.max(1)
+      if(hasUpgrade("s",25)||hasMilestone("a", 30))player.f.points = player.f.points.max(hasMilestone("a", 30)?1e10:1)
 if(hasMilestone("a", 25))setBuyableAmount(this.layer, 11, player.f.points.pow(hasUpgrade("f",44)?upgradeEffect("f",43):1).add(1).log10().div(0.2089785172762535).root(pow11).floor().add(1))
     
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
-   
+    autoUpgrade() { return hasMilestone("a", 30)  },
     layerShown() { return hasMilestone("a", 4) }
 })

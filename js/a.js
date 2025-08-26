@@ -142,7 +142,7 @@ milestones: {
     },
 20: {
         requirementDescription: "20 在震撼人心的挑战2中获取1e72点数",
-        effectDescription: "降低a购买13价格,26 黄金张力 解锁镀金(咕咕咕）",
+        effectDescription: "降低a购买13价格,26 黄金张力 解锁镀金",
         done() { return player.points.gte(1e72)&&inChallenge("p",11)&&hasMilestone("a",18)}
     },
 21: {
@@ -192,7 +192,7 @@ milestones: {
     },
 30: {
         requirementDescription: "30 获得4复制超新星",
-        effectDescription: "咕咕咕",
+        effectDescription: "自动购买f升级,你的复制点不会低于1e10",
         done() { return player.s.points.gte("4") }
 },
 },

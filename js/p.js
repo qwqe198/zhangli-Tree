@@ -33,7 +33,7 @@ if(hasUpgrade("s",22))mult=mult.pow(1.15)
 
 if(hasMilestone("a",1))mult=mult.pow(0.5).div(2)
 if(hasMilestone("a",18))mult=mult.root(player.a.points)
-if(mult.gte(1e100))mult=mult.pow(0.1).mul(1e90)
+if(mult.gte(1e50))mult=mult.pow(0.1).mul(1e45)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -42,6 +42,7 @@ if(hasUpgrade("p",22))exp=exp.sub(0.25)
 if(hasUpgrade("p",23))exp=exp.add(0.333)
 if(hasUpgrade("p",35))exp=exp.add(upgradeEffect("p",35).mul(10))
 if(hasMilestone("a",21))exp=exp.add(challengeEffect("a", 11).div(10))
+if(exp.gte(3))exp=exp.mul(0.1).add(2.7)
         return exp
     },
     eff() {

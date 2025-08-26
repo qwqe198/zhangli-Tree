@@ -53,6 +53,7 @@ if(hasUpgrade("f",24))gain=gain.pow(1.05)
 if(hasUpgrade("f",41))gain=gain.pow(upgradeEffect("s",14))
 if(hasMilestone("a",4))gain=gain.pow(0.25).div(1000)
 if(gain.gte(hasUpgrade("s",31)?1e150:1e100))gain=gain.pow(0.1).mul(hasUpgrade("s",31)?1e135:1e90)
+if(gain.gte(1e200))gain=gain.pow(0.1).mul(1e180)
 	return gain
 }
 

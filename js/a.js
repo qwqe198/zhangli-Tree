@@ -186,15 +186,20 @@ milestones: {
         done() { return challengeEffect("a", 11).gte(5.7)}
     },
 29: {
-        requirementDescription: "29 获得1.3f镀金分数",
+        requirementDescription: "29 获得1.4f镀金分数",
         effectDescription: "复制乘数变成原来的(s升级+1)次方",
-        done() { return challengeEffect("a", 12).gte(1.3)}
+        done() { return challengeEffect("a", 12).gte(1.4)}
     },
 30: {
         requirementDescription: "30 获得4复制超新星",
-        effectDescription: "自动购买f升级,你的复制点不会低于1e10(需要购买对应升级)",
+        effectDescription: "自动购买f升级,你的复制点不会低于1e10(需要购买对应升级),张力点获取^(1+里程碑*0.01)",
         done() { return player.s.points.gte("4") }
 },
+31: {
+        requirementDescription: "31 获得6.6p镀金分数",
+        effectDescription: "中子星获取x(p镀金分数)",
+        done() { return challengeEffect("a", 11).gte(6.6)}
+    },
 },
 buyables: {
         11: {
@@ -314,6 +319,7 @@ if(hasUpgrade("f",31))eff=eff.pow(2)
             rewardEffect() {
 let re=new Decimal(0)
               if(inChallenge("a",11))  re=re.max(player.p.points.add(1).log10().pow(0.5)).max(challengeEffect("a", 11))
+
  if(!inChallenge("a",11))re=re.max(player.a.challenges[11])
 return re
             },

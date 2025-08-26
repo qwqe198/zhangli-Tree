@@ -30,6 +30,7 @@ if(hasUpgrade("f",22))mult=mult.mul(10)
 if(hasUpgrade("s",12))mult=mult.mul(upgradeEffect("s",12))
 if(hasUpgrade("f",24))mult=mult.pow(1.05)
 if(hasUpgrade("s",22))mult=mult.pow(1.15)
+if(hasMilestone("a",30))mult=mult.pow(1+player.a.milestones.length*0.01)
 
 if(hasMilestone("a",1))mult=mult.pow(0.5).div(2)
 if(hasMilestone("a",18))mult=mult.root(player.a.points)

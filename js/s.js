@@ -26,6 +26,7 @@ stg() { // Calculate the multiplier for main currency from bonuses
 if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
 if(hasUpgrade("p",54))st=st.mul(player.a.points)
 if(hasMilestone("a",26))st=st.mul(player.f.points.add(10).log10().add(10).log10())
+if(hasMilestone("a",31))st=st.mul(challengeEffect("a", 11))
 if(!player.s.points.gte(1))st=new Decimal(0)
 
         return st

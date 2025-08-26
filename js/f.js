@@ -259,13 +259,23 @@ effect(){
         "main": {
             content: [
                 "main-display",
-["prestige-button", "", function () { return player.f.points.gte(1)? { 'display': 'none' } : {} }],
+                ["prestige-button", "", function () { return player.f.points.gte(1) ? { 'display': 'none' } : {} }],
 
-                ["display-text", () => 
+                ["display-text", () =>
                     `9.滚雪球同样是具备张力的 复制点每秒x${format(layers.f.m())},建议在复制点略高于价格时购买`,
                     { "font-size": "20px" }
                 ],
-"milestones",
+
+                ["display-text", function () {
+                    return hasMilestone("a", 9) ? `<text style = "color:red">由于a里程碑9,复制点乘数开${format(layers.f.mr())}次根</text>` : ""
+                        
+                }
+                ],
+                ["display-text", function () {
+                    return player.f.points.gte(1e308) ? `<text style = "color:red">由于软上限,上一个效果更强了</text>` : ""
+
+                       
+                }],
                 "blank",
                 "buyables",
                 "blank",
@@ -273,8 +283,8 @@ effect(){
             ],
             unlocked() { return true }
         },
-     
-        },
+
+    },
     
     update(diff) {
 var pow11=new Decimal(2)

@@ -10,7 +10,11 @@ addLayer("f", {
         }
     },
     color: "#3300ffff",
-    requires: new Decimal(1), // Can be a function that takes requirement increases into account
+    requires() {
+let r=new Decimal(1)
+if(inChallenge("a",11))r=new Decimal(Infinity)
+ return r
+}, // Can be a function that takes requirement increases into account
     resource: "复制点", // Name of prestige currency
     baseResource: "点数", // Name of resource prestige is based on
     baseAmount() { return player.points }, // Get the current amount of baseResource
@@ -42,7 +46,7 @@ m = new Decimal(1.01)
 if(hasMilestone("a",13))m=m.add(upgradeEffect("p",35).div(hasMilestone("a",17)?new Decimal(5).sub(player.s.points).max(1):5))
 if(hasUpgrade("f",22))m=m.mul(1.005)
 if(hasUpgrade("s",14))m=m.mul(upgradeEffect("s",14))
-
+if(hasUpgrade("p",55))m=m.pow(upgradeEffect("p",55))
 if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
 
 if(hasUpgrade("f",24))m=m.pow(1.2)
@@ -51,7 +55,9 @@ if(hasUpgrade("f",34))m=m.pow(buyableEffect("p",12))
 m=m.pow(buyableEffect("a",12))
 m=m.pow(buyableEffect("f",11))
 if(hasUpgrade("s",21))m=m.pow(1.15)
+if(hasMilestone("a",23))m=m.pow(player.a.points)
 m=m.root(layers.f.mr())
+
         return m
     },
 buyables: {

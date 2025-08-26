@@ -145,6 +145,26 @@ milestones: {
         effectDescription: "降低a购买13价格,26 黄金张力 解锁镀金(咕咕咕）",
         done() { return player.points.gte(1e72)&&inChallenge("p",11)&&hasMilestone("a",18)}
     },
+21: {
+        requirementDescription: "21 获得2p镀金分数",
+        effectDescription: "p镀金分数的百分之一加成张力点获取指数",
+        done() { return challengeEffect("a", 11).gte(2)}
+    },
+22: {
+        requirementDescription: "22 获得4p镀金分数",
+        effectDescription: "p镀金分数的百分之一加成p购买12基数",
+        done() { return challengeEffect("a", 11).gte(4)}
+    },
+23: {
+        requirementDescription: "23 27.双里程碑张力 在上一个里程碑的基础上获得1e25复制点",
+        effectDescription: "复制点乘数^(冲击点）",
+        done() { return hasMilestone("a",22)&&player.f.points.gte(1e25)}
+    },
+24: {
+        requirementDescription: "24 第15里程碑 但是在4冲击点",
+        effectDescription: "解锁f镀金(制作中)",
+        done() { return hasMilestone("a",22)&&player.s.points.gte(2)}
+    },
 },
 buyables: {
         11: {
@@ -241,8 +261,42 @@ if(hasUpgrade("f",31))eff=eff.pow(2)
             ],
             unlocked() { return true }
         },
+ "chl": {
+            content: [
+                "main-display",
+ "prestige-button",
+                "resource-display",
+             
+
+                "challenges",
+            ],
+            unlocked() { return hasMilestone("a", 20) }
         },
-    
+        },
+    challenges: {
+        11: {
+            name() { return 'p镀金'},
+            challengeDescription() { return '禁用f层级,基于镀金内最高张力点获得分数.'},
+            rewardDescription() { 
+                return `镀金分数:${format(this.rewardEffect())}`
+            },
+            rewardEffect() {
+let re=new Decimal(0)
+              if(inChallenge("a",11))  re=re.max(player.p.points.add(1).log10().pow(0.5)).max(challengeEffect("a", 11))
+ if(!inChallenge("a",11))re=re.max(player.a.challenges[11])
+return re
+            },
+            goal: 0,
+
+            onExit() {
+                player.a.challenges[11] = player.p.points.add(1).log10().pow(0.5).max(challengeEffect("a", 11)).max(0)
+            },
+            completionLimit: "1eeeee10",
+            canComplete() { return true },
+            resource() { return player.p.points },
+            unlocked() { return  hasMilestone("a", 20) }
+        }
+    },
     update(diff) {
         player.a.sp = player.a.sp.add(this.spg().mul(diff))
         

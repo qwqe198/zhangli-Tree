@@ -37,6 +37,7 @@ exp = new Decimal(1)//基础是0.1，要x10
 if(hasUpgrade("p",22))exp=exp.sub(0.25)
 if(hasUpgrade("p",23))exp=exp.add(0.333)
 if(hasUpgrade("p",35))exp=exp.add(upgradeEffect("p",35).mul(10))
+if(hasMilestone("a",21))exp=exp.add(challengeEffect("a", 11).div(10))
         return exp
     },
     eff() {
@@ -199,8 +200,20 @@ effect(){
 
         },
 54: {
-            description: "中子星获取+(冲击点),你的复制超新星不会低于1",
+            description: "中子星获取x(冲击点),你的复制超新星不会低于1",
             cost() { return new Decimal(1e16) },
+            unlocked() { return hasMilestone("a",18) },
+
+        },
+55: {
+            description: "购买升级数量的千分之一加成复制乘数",
+effect(){
+                    let b=new Decimal(player.p.upgrades.length).mul(1e-3).add(1)
+                 
+                    return b;
+                },
+                effectDisplay() { return "x"+format(this.effect())},
+            cost() { return new Decimal(1e40) },
             unlocked() { return hasMilestone("a",18) },
 
         },
@@ -250,6 +263,7 @@ var base = new Decimal(0.1)
 if(hasMilestone("a", 16))base=base.add(player.s.points.mul(0.01))
 if(hasUpgrade("p",51))base=base.add(upgradeEffect("p", 35))
 if(hasUpgrade("f",35))base=base.add(upgradeEffect("f", 35))
+if(hasMilestone("a",22))base=base.add(challengeEffect("a", 11).div(100))
 var eff = x.mul(base).add(1)
                 return eff
             },

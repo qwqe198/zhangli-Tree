@@ -192,7 +192,7 @@ milestones: {
     },
 30: {
         requirementDescription: "30 获得4复制超新星",
-        effectDescription: "自动购买f升级,你的复制点不会低于1e10",
+        effectDescription: "自动购买f升级,你的复制点不会低于1e10(需要购买对应升级)",
         done() { return player.s.points.gte("4") }
 },
 },

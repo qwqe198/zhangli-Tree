@@ -280,7 +280,7 @@ effect(){
 var pow11=new Decimal(2)
 if(hasUpgrade("f",43))pow11=pow11.root(upgradeEffect("f",43))
 player.f.points = player.f.points.mul(this.m().pow(diff))
-      if(hasUpgrade("s",25)||hasMilestone("a", 30))player.f.points = player.f.points.max(hasMilestone("a", 30)?1e10:1)
+      if(hasUpgrade("s",25))player.f.points = player.f.points.max(hasMilestone("a", 30)?1e10:1)
 if(hasMilestone("a", 25))setBuyableAmount(this.layer, 11, player.f.points.pow(hasUpgrade("f",44)?upgradeEffect("f",43):1).add(1).log10().div(0.2089785172762535).root(pow11).floor().add(1))
     
     },

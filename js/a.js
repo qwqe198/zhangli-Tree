@@ -200,6 +200,36 @@ milestones: {
         effectDescription: "中子星获取x(p镀金分数)",
         done() { return challengeEffect("a", 11).gte(6.6)}
     },
+32: {
+        requirementDescription: "32 完成4次极端折算",
+        effectDescription: "f升级43效果^(里程碑/30)",
+        done() { return player.s.challenges[11]>=4}
+    },
+33: {
+        requirementDescription: "33 获得1e1725复制点",
+        effectDescription: "复制点乘数^(f升级数量+1)",
+        done() { return player.f.points.gte("1e1725") }
+},
+34: {
+        requirementDescription: "34 完成5次极端折算",
+        effectDescription: "p升级33效果^(里程碑/30)",
+        done() { return player.s.challenges[11]>=5}
+    },
+35: {
+        requirementDescription: "35 获得7.3p镀金分数",
+        effectDescription: "30.来自里程碑的张力 张力!",
+        done() { return challengeEffect("a", 11).gte(7.3)}
+    },
+36: {
+        requirementDescription: "36 获得2.15f镀金分数",
+        effectDescription: "31.多功能张力 张力!!中子星获取x(f镀金分数) ",
+        done() { return challengeEffect("a", 12).gte(2.15)}
+    },
+37: {
+        requirementDescription: "37 咕咕咕",
+        effectDescription: "咕咕咕 ",
+        done() { return false}
+    },
 },
 buyables: {
         11: {
@@ -335,7 +365,7 @@ return re
         },
 12: {
             name() { return 'f镀金'},
-            challengeDescription() { return '禁用p层级,基于镀金内最高复制点获得分数.'},
+            challengeDescription() { return '禁用p层级,复制点软上限从1e100开始，基于镀金内最高复制点获得分数.'},
             rewardDescription() { 
                 return `镀金分数:${format(this.rewardEffect())}`
             },

@@ -27,6 +27,7 @@ if(hasUpgrade("s",15))st=st.mul(upgradeEffect("s",15))
 if(hasUpgrade("p",54))st=st.mul(player.a.points)
 if(hasMilestone("a",26))st=st.mul(player.f.points.add(10).log10().add(10).log10())
 if(hasMilestone("a",31))st=st.mul(challengeEffect("a", 11))
+if(hasMilestone("a",36))st=st.mul(challengeEffect("a", 12))
 if(!player.s.points.gte(1))st=new Decimal(0)
 
         return st
@@ -51,6 +52,7 @@ effect(){
                     let b=player.s.st
             if(hasMilestone("a",15))b=b.mul(player.s.points.pow(player.a.points))
 b=b.pow(4)
+if(hasUpgrade("s",33))b=b.pow(player.s.points.pow(0.5))
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -66,6 +68,7 @@ effect(){
                     let b=player.s.st
 if(hasMilestone("a",15))b=b.mul(player.s.points.pow(player.a.points))
                  b=b.pow(2)
+if(hasUpgrade("s",33))b=b.pow(player.s.points.pow(0.5))
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -80,6 +83,7 @@ currencyDisplayName: "中子星",
 effect(){
                     let b=player.s.st
                  if(hasMilestone("a",15))b=b.mul(player.s.points.pow(player.a.points))
+if(hasUpgrade("s",33))b=b.pow(player.s.points.pow(0.5))
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -93,7 +97,7 @@ currencyDisplayName: "中子星",
             unlocked() { return true },
 effect(){
                     let b=player.s.st.add(1).log10().mul(0.0025).add(1)
-                 
+                 if(hasUpgrade("s",33))b=b.pow(player.s.points.pow(0.5))
                     return b;
                 },
 effectDisplay() { return format(this.effect())+"倍" },
@@ -143,7 +147,7 @@ currencyDisplayName: "中子星",
         currencyLayer: "s"
         }, 
 24: {
-            description: "m2 23 看似减益 实则增益 一定张力 使里程碑14的效果/1.1",
+            description: "m2 23 看似减益 实则增益 一定张力 使张力软上限的效果/1.1",
             cost() { return new Decimal(10000) },
             unlocked() { return player.s.points.gte(3) },
 
@@ -169,8 +173,54 @@ currencyDisplayName: "中子星",
         currencyInternalName: "st",
         currencyLayer: "s"
         }, 
-    },
+32: {
+            description: "chal1解锁一个挑战",
+            cost() { return new Decimal(250000) },
+            unlocked() { return player.s.points.gte(4) },
 
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+33: {
+            description: "meta1 28.四重张力 s前4个升级变成原来的(复制超新星的0.5次方)次方",
+            cost() { return new Decimal(500000) },
+            unlocked() { return player.s.points.gte(4) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+34: {
+            description: "meta2 28.五重张力 p前5个升级直接对复制点生效",
+            cost() { return new Decimal(1000000) },
+            unlocked() { return player.s.points.gte(4) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+    },
+    challenges: {
+        11: {
+            name() { return '极端折算'},
+            challengeDescription() { return 'f购买11价格折算从0开始,不可弱化,移除,挑战完成次数基于它的数量.'},
+            rewardDescription() { 
+                return `当前${format(this.rewardEffect())}/100`
+            },
+            rewardEffect() {
+                return new Decimal(player.s.challenges[11])
+            },
+        
+            onExit() {
+                player.s.challenges[11] = getBuyableAmount("f", 11).max(challengeEffect("s", 11)).max(0)
+            },
+            completionLimit: "1eeeee10",
+            canComplete() { return true },
+            resource() { return player.points },
+            unlocked() { return hasUpgrade("s",32) }
+        }
+    },
     tabFormat: {
         "upg": {
             content: [
@@ -186,7 +236,8 @@ currencyDisplayName: "中子星",
             ],
             unlocked() { return true }
         },
-     "buy": {
+     
+"chl": {
             content: [
                 "main-display",
  "prestige-button",
@@ -196,9 +247,9 @@ currencyDisplayName: "中子星",
                     { "font-size": "20px" }
                 ],
 
-                "buyables",
+                "challenges",
             ],
-            unlocked() { return true }
+            unlocked() { return hasUpgrade("s",32) }
         },
         },
     

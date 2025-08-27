@@ -34,21 +34,27 @@ exp = new Decimal(1)
     },
  mr() { 
 mr = new Decimal(1)
-mrpow=new Decimal(1)
-if(player.f.points.gte(1e308))mrpow=player.f.points.add(10).log10().div(308).max(1)
-if(hasUpgrade("s",24))mrpow=mrpow.div(1.1)
+
 if(hasMilestone("a",9))mr=player.f.points.add(10).log10()
-mr=mr.pow(mrpow)
+mr=mr.pow(layers.f.mrpow())
         return mr
+    },
+ mrpow() { 
+
+mrpow=new Decimal(1)
+if(player.f.points.gte(inChallenge("a",12)?1e100:1e308))mrpow=player.f.points.add(10).log10().div(inChallenge("a",12)?100:308)
+if(hasUpgrade("s",24))mrpow=mrpow.div(1.1)
+mrpow=mrpow.max(1)
+        return mrpow
     },
  m() { 
 m = new Decimal(1.01)
 if(hasMilestone("a",13))m=m.add(upgradeEffect("p",35).div(hasMilestone("a",17)?new Decimal(5).sub(player.s.points).max(1):5))
 if(hasUpgrade("f",22))m=m.mul(1.005)
 if(hasUpgrade("s",14))m=m.mul(upgradeEffect("s",14))
+
 if(hasUpgrade("p",55))m=m.pow(upgradeEffect("p",55))
 if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
-
 if(hasUpgrade("f",24))m=m.pow(1.2)
 if(hasUpgrade("f",33))m=m.pow(upgradeEffect("f",23))
 if(hasUpgrade("f",34))m=m.pow(buyableEffect("p",12))
@@ -57,7 +63,10 @@ m=m.pow(buyableEffect("f",11))
 if(hasUpgrade("s",21))m=m.pow(1.15)
 if(hasMilestone("a",23))m=m.pow(player.a.points)
 if(hasMilestone("a",29))m=m.pow(player.s.upgrades.length+1)
+if(hasMilestone("a",33))m=m.pow(player.f.upgrades.length+1)
 if(hasMilestone("a",25))m=m.pow(challengeEffect("a", 11).add(1))
+if(hasUpgrade("s",34))m=m.pow(32)
+
 m=m.root(layers.f.mr())
 
         return m
@@ -68,8 +77,9 @@ buyables: {
 if(x.gte(10)&&!hasMilestone("a",19))x=x.pow(3).div(100)
 var pow=new Decimal(2)
 if(hasUpgrade("f",43))pow=pow.root(upgradeEffect("f",43))
+if(inChallenge("s",11))pow=new Decimal(6)
                 var c = new Decimal(1.618).pow(x.pow(pow)).floor()
-if(hasUpgrade("f",44))c=c.root(upgradeEffect("f",43))
+if(hasUpgrade("f",44)&&!inChallenge("s",11))c=c.root(upgradeEffect("f",43))
                 return c
  },
             display() { return `复制乘数<br />^${format(buyableEffect(this.layer, this.id), 2)}. (下一个: ${format(this.effect(getBuyableAmount(this.layer, this.id).add(1)))}).花费: ${format(this.cost(getBuyableAmount(this.layer, this.id)))}复制点<br>等级: ${format(getBuyableAmount(this.layer, this.id))}` },
@@ -236,7 +246,7 @@ effect(){
             unlocked() { return player.s.points.gte(3) },
 effect(){
                     let b=player.s.points.add(10).log10()
-                 
+                 if(hasMilestone("a",32))b=b.pow(player.a.milestones.length/30)
                     return b;
                 },
                 effectDisplay() { return "开"+format(this.effect())+"次根"},
@@ -272,7 +282,7 @@ effect(){
                 }
                 ],
                 ["display-text", function () {
-                    return player.f.points.gte(1e308) ? `<text style = "color:red">由于软上限,上一个效果更强了</text>` : ""
+                    return layers.f.mrpow()>1 ? `<text style = "color:red">由于软上限,上一个效果变成原来的${format(layers.f.mrpow())}次方</text>` : ""
 
                        
                 }],
@@ -289,9 +299,10 @@ effect(){
     update(diff) {
 var pow11=new Decimal(2)
 if(hasUpgrade("f",43))pow11=pow11.root(upgradeEffect("f",43))
+if(inChallenge("s",11))pow11=new Decimal(6)
 player.f.points = player.f.points.mul(this.m().pow(diff))
       if(hasUpgrade("s",25))player.f.points = player.f.points.max(hasMilestone("a", 30)?1e10:1)
-if(hasMilestone("a", 25))setBuyableAmount(this.layer, 11, player.f.points.pow(hasUpgrade("f",44)?upgradeEffect("f",43):1).add(1).log10().div(0.2089785172762535).root(pow11).floor().add(1))
+if(hasMilestone("a", 25))setBuyableAmount(this.layer, 11, player.f.points.pow(hasUpgrade("f",44)&&!inChallenge("s",11)?upgradeEffect("f",43):1).add(1).log10().div(0.2089785172762535).root(pow11).floor().add(1))
     
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)

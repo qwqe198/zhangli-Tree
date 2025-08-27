@@ -136,7 +136,7 @@ effect(){
             unlocked() { return hasMilestone("a",4) },
 effect(){
                     let b=player.f.points.add(1).log10().add(1).log10().mul(0.1).add(1);
-                 
+                 if(hasMilestone("a",34))b=b.pow(player.a.milestones.length/30)
                     return b;
                 },
                 effectDisplay() { return "^"+format(this.effect())},

@@ -34,7 +34,7 @@ if(hasMilestone("a",30))mult=mult.pow(1+player.a.milestones.length*0.01)
 
 if(hasMilestone("a",1))mult=mult.pow(0.5).div(2)
 if(hasMilestone("a",18))mult=mult.root(player.a.points)
-if(mult.gte(1e50))mult=mult.pow(0.1).mul(1e45)
+if(mult.gte(1e50)&&hasMilestone("a",18))mult=mult.pow(0.1).mul(1e45)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses

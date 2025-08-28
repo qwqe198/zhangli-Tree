@@ -21,6 +21,8 @@ if(inChallenge("a",12))r=new Decimal(Infinity)
     exponent: 0.1, // Prestige currency exponent 初始值0.5
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+
+if(hasMilestone("a",38)&&!inChallenge("a",11))mult=mult.mul(1e308)
 if(hasUpgrade("p",22))mult=mult.mul(new Decimal(3.3333).pow(hasMilestone("a",2)&&hasUpgrade("p",23)?10:1))
 if(hasUpgrade("p",23))mult=mult.div(new Decimal(1.1111).pow(hasMilestone("a",2)&&hasUpgrade("p",22)?80:1))
 if(hasUpgrade("p",31))mult=mult.mul(upgradeEffect("p", 31))

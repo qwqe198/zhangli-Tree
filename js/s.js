@@ -39,7 +39,7 @@ exp = new Decimal(1)
         return exp
     },
    getNextAt() {
-        let gain = new Decimal("1e154").pow(new Decimal(2).pow(player.s.points))
+        let gain = new Decimal("2").pow(new Decimal(2).pow(player.s.points.add(9)))
       
         return gain
     },
@@ -156,7 +156,7 @@ currencyDisplayName: "中子星",
         currencyLayer: "s"
         }, 
 25: {
-            description: "qol2你的复制点不会低于1",
+            description: "qol2你的复制点不会低于1000",
             cost() { return new Decimal(10000) },
             unlocked() { return player.s.points.gte(3) },
 
@@ -192,9 +192,18 @@ currencyDisplayName: "中子星",
         currencyLayer: "s"
         }, 
 34: {
-            description: "meta2 28.五重张力 p前5个升级直接对复制点生效",
+            description: "meta2 29.五重张力 p前5个升级直接对复制点生效",
             cost() { return new Decimal(1000000) },
             unlocked() { return player.s.points.gte(4) },
+
+currencyDisplayName: "中子星",
+        currencyInternalName: "st",
+        currencyLayer: "s"
+        }, 
+35: {
+            description: "chal2解锁第二个挑战",
+            cost() { return new Decimal(5000000) },
+            unlocked() { return player.s.points.gte(5) },
 
 currencyDisplayName: "中子星",
         currencyInternalName: "st",
@@ -219,7 +228,25 @@ currencyDisplayName: "中子星",
             canComplete() { return true },
             resource() { return player.points },
             unlocked() { return hasUpgrade("s",32) }
-        }
+        },
+12: {
+            name() { return '复制熔化'},
+            challengeDescription() { return '复制点软上限从10开始,挑战完成次数基于复制点数量级,a30里程碑的不低于失效.'},
+            rewardDescription() { 
+                return `当前${format(this.rewardEffect())}/100`
+            },
+            rewardEffect() {
+                return new Decimal(player.s.challenges[12])
+            },
+        
+            onExit() {
+                player.s.challenges[12] = player.f.points.add(1).log10().max(challengeEffect("s", 12)).floor().max(0)
+            },
+            completionLimit: "1eeeee10",
+            canComplete() { return true },
+            resource() { return player.points },
+            unlocked() { return hasUpgrade("s",35) }
+        },
     },
     tabFormat: {
         "upg": {

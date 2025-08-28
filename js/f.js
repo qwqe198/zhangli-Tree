@@ -43,6 +43,7 @@ mr=mr.pow(layers.f.mrpow())
 
 mrpow=new Decimal(1)
 if(player.f.points.gte(inChallenge("a",12)?1e100:1e308))mrpow=player.f.points.add(10).log10().div(inChallenge("a",12)?100:308)
+if(player.f.points.gte(inChallenge("s",12)?10:1e308))mrpow=player.f.points.add(10).log10().div(inChallenge("s",12)?1:308)
 if(hasUpgrade("s",24))mrpow=mrpow.div(1.1)
 mrpow=mrpow.max(1)
         return mrpow
@@ -58,6 +59,8 @@ if(hasUpgrade("p",32))m=m.pow(upgradeEffect("p",32))
 if(hasUpgrade("f",24))m=m.pow(1.2)
 if(hasUpgrade("f",33))m=m.pow(upgradeEffect("f",23))
 if(hasUpgrade("f",34))m=m.pow(buyableEffect("p",12))
+if(hasUpgrade("f",51))m=m.pow(player.p.points.add(10).log10())
+if(hasUpgrade("f",52))m=m.pow(player.a.sp.add(10).log10())
 m=m.pow(buyableEffect("a",12))
 m=m.pow(buyableEffect("f",11))
 if(hasUpgrade("s",21))m=m.pow(1.15)
@@ -68,7 +71,7 @@ if(hasMilestone("a",25))m=m.pow(challengeEffect("a", 11).add(1))
 if(hasUpgrade("s",34))m=m.pow(32)
 
 m=m.root(layers.f.mr())
-
+if(hasMilestone("a",37))m=m.min(player.f.points.add(1e10))
         return m
     },
 buyables: {
@@ -264,6 +267,18 @@ effect(){
             unlocked() { return player.s.points.gte(3) },
 
         },
+51: {
+            description: "复制乘数变成原来的(张力点数量级)次方",
+            cost() { return new Decimal("1e1950") },
+            unlocked() { return player.s.points.gte(4) },
+
+        },
+52: {
+            description: "复制乘数变成原来的(冲击碎片数量级)次方",
+            cost() { return new Decimal("1e2250") },
+            unlocked() { return player.s.points.gte(4) },
+
+        },
     },
     tabFormat: {
         "main": {
@@ -295,13 +310,21 @@ effect(){
         },
 
     },
-    
+     doReset(resettingLayer) {
+        if (layers[resettingLayer].row > layers[this.layer].row) {
+            let kept = ["unlocked", "auto"]
+           
+                
+              if (hasMilestone("a", 37)) kept.push("milestones")
+            layerDataReset(this.layer, kept)
+        }
+    },
     update(diff) {
 var pow11=new Decimal(2)
 if(hasUpgrade("f",43))pow11=pow11.root(upgradeEffect("f",43))
 if(inChallenge("s",11))pow11=new Decimal(6)
 player.f.points = player.f.points.mul(this.m().pow(diff))
-      if(hasUpgrade("s",25))player.f.points = player.f.points.max(hasMilestone("a", 30)?1e10:1)
+      if(hasUpgrade("s",25))player.f.points = player.f.points.max(hasMilestone("a", 30)&&!inChallenge("s",12)?1e308:1000)
 if(hasMilestone("a", 25))setBuyableAmount(this.layer, 11, player.f.points.pow(hasUpgrade("f",44)&&!inChallenge("s",11)?upgradeEffect("f",43):1).add(1).log10().div(0.2089785172762535).root(pow11).floor().add(1))
     
     },

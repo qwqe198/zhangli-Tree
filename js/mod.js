@@ -42,7 +42,9 @@ let gain = new Decimal(layers.p.eff())
 		if(hasUpgrade("p",13))gain=gain.pow(2)
 		if(hasUpgrade("p",14))gain=gain.pow(2)
 		if(hasUpgrade("p",15))gain=gain.pow(2)
-if(hasUpgrade("f",14))gain=gain.pow(upgradeEffect("f",14))
+if(hasUpgrade("f",14))gain=gain.pow(upgradeEffect("f",14))//基础
+
+if(hasMilestone("a",39))gain=gain.mul("1e4000")
 if(hasUpgrade("s",11))gain=gain.mul(upgradeEffect("s",11))
 gain=gain.mul(buyableEffect("p",11))
 gain=gain.mul(buyableEffect("a",11))

@@ -192,7 +192,7 @@ milestones: {
     },
 30: {
         requirementDescription: "30 获得4复制超新星",
-        effectDescription: "自动购买f升级,你的复制点不会低于1e10(需要购买对应升级),张力点获取^(1+里程碑*0.01)",
+        effectDescription: "自动购买f升级,你的复制点不会低于1e308(需要购买对应升级),张力点获取^(1+里程碑*0.01)",
         done() { return player.s.points.gte("4") }
 },
 31: {
@@ -226,9 +226,19 @@ milestones: {
         done() { return challengeEffect("a", 12).gte(2.15)}
     },
 37: {
-        requirementDescription: "37 咕咕咕",
-        effectDescription: "咕咕咕 ",
-        done() { return false}
+        requirementDescription: "37 获得5复制超新星",
+        effectDescription: "保留f里程碑32.张力崩塌 复制点每秒增长不超过原来的平方",
+        done() { return player.s.points.gte(5) }
+    },
+38: {
+        requirementDescription: "38 完成9次复制熔化",
+        effectDescription: "33.无限张力 张力点获取x1e308(a挑战11内失效)",
+        done() { return player.s.challenges[12]>=9}
+    },
+39: {
+        requirementDescription: "39 获得8.3p镀金分数",
+        effectDescription: "34.永恒张力 点数获取x1e4000",
+        done() { return challengeEffect("a", 11).gte(8.3)}
     },
 },
 buyables: {

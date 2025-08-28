@@ -31,6 +31,7 @@ if(hasUpgrade("f",22))sp=sp.mul(10)
 if(hasUpgrade("s",13))sp=sp.mul(upgradeEffect("s",13))
 if(hasUpgrade("f",24))sp=sp.pow(1.05)
 sp=sp.pow(player.a.points.max(1))
+if(sp.gte(1e300))sp=sp.pow(0.1).mul(1e270)
         return sp
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
